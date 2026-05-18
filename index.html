@@ -3,540 +3,817 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haikal & Memey — A Story Still Blooming</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<title>Memey</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blush: #f4d4d4;
-    --rose: #c9747a;
-    --deep-rose: #8b3a42;
-    --petal: #fdf0f0;
-    --cream: #fdf8f3;
-    --ink: #2a1a1e;
-    --soft-ink: #5a3a40;
-    --gold: #c8a96e;
-    --sage: #8fa68c;
-  }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background-color: var(--cream);
-    color: var(--ink);
-    font-family: 'Lora', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.85;
-    overflow-x: hidden;
-  }
+:root {
+  --blush:     #f2d7d9;
+  --blush-mid: #e8b4b8;
+  --rose:      #c97a85;
+  --rose-deep: #a05060;
+  --petal-1:   #f7e0e2;
+  --petal-2:   #f0c8cc;
+  --petal-3:   #e4a8b0;
+  --green:     #7a9e7e;
+  --leaf:      #5c7a5e;
+  --cream:     #fdf6f0;
+  --ink:       #2b1a1d;
+  --ink-soft:  #4a3035;
+  --gold:      #c9a96e;
+}
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: 
-      radial-gradient(ellipse at 10% 20%, rgba(244,212,212,0.25) 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 80%, rgba(201,116,122,0.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(253,240,240,0.3) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+html { scroll-behavior: smooth; }
 
-  .wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 80px 40px 120px;
-  }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Lora', serif;
+  overflow-x: hidden;
+  cursor: default;
+}
 
-  .cover {
-    text-align: center;
-    padding: 60px 0 80px;
-  }
+/* ─── SVG PEONY ─── */
+.peony-svg { display: block; overflow: visible; }
 
-  .cover h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(2.4rem, 6vw, 4rem);
-    font-weight: 400;
-    color: var(--deep-rose);
-    line-height: 1.2;
-    margin-bottom: 16px;
-    animation: fadeIn 1.5s ease 0.3s both;
-  }
+/* ─── FLOATING PETALS BG ─── */
+.petal-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
 
-  .cover h1 em {
-    font-style: italic;
-    color: var(--rose);
-  }
+.falling-petal {
+  position: absolute;
+  opacity: 0;
+  animation: fall linear infinite;
+}
 
-  .cover-subtitle {
-    font-family: 'EB Garamond', Georgia, serif;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-top: 20px;
-    animation: fadeIn 1.5s ease 0.6s both;
-  }
+@keyframes fall {
+  0%   { transform: translateY(-60px) rotate(0deg); opacity: 0; }
+  5%   { opacity: 0.55; }
+  95%  { opacity: 0.3; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
 
-  .cover-date {
-    font-family: 'EB Garamond', serif;
-    font-size: 0.9rem;
-    color: var(--soft-ink);
-    font-style: italic;
-    margin-top: 16px;
-    animation: fadeIn 1.5s ease 0.9s both;
-  }
+/* ─── COVER ─── */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 80px 24px 60px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 60%, #fbeaec 0%, var(--cream) 70%);
+}
 
-  .chapter {
-    margin: 72px 0 36px;
-    text-align: center;
-  }
+/* big peony corners */
+.corner-peony {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+.corner-peony.tl { top: -40px; left: -40px; width: 320px; transform: rotate(-15deg); }
+.corner-peony.tr { top: -30px; right: -40px; width: 280px; transform: rotate(20deg) scaleX(-1); }
+.corner-peony.bl { bottom: -50px; left: -30px; width: 260px; transform: rotate(10deg); }
+.corner-peony.br { bottom: -40px; right: -30px; width: 300px; transform: rotate(-12deg) scaleX(-1); }
 
-  .chapter-number {
-    font-family: 'EB Garamond', serif;
-    font-size: 0.75rem;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 12px;
-  }
+.cover-inner { position: relative; z-index: 2; text-align: center; }
 
-  .chapter h2 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 400;
-    color: var(--deep-rose);
-    line-height: 1.3;
-  }
+.eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: up 1s ease 0.2s forwards;
+}
 
-  .chapter h2 em { font-style: italic; }
+.cover-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(80px, 18vw, 180px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.9;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: up 1.1s ease 0.4s forwards;
+}
 
-  .section {
-    margin-bottom: 44px;
-  }
+.cover-name span {
+  color: var(--rose-deep);
+}
 
-  p {
-    margin-bottom: 20px;
-    color: var(--soft-ink);
-  }
+.cover-tagline {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(15px, 2.2vw, 20px);
+  color: var(--ink-soft);
+  margin-top: 24px;
+  opacity: 0;
+  animation: up 1.1s ease 0.6s forwards;
+  line-height: 1.7;
+}
 
-  p strong {
-    color: var(--deep-rose);
-    font-weight: 500;
-  }
+.cover-divider {
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  animation: up 1s ease 0.9s forwards;
+}
+.cover-divider .line { width: 60px; height: 1px; background: var(--blush-mid); }
+.cover-divider .flower { font-size: 20px; color: var(--rose); }
 
-  .message-block {
-    border-radius: 0 12px 12px 0;
-    padding: 20px 24px;
-    margin: 28px 0;
-  }
+/* ─── SECTIONS ─── */
+.section {
+  position: relative;
+  padding: 110px 24px;
+  max-width: 860px;
+  margin: 0 auto;
+}
 
-  .message-block.haikal {
-    border-left: 3px solid var(--rose);
-    background: rgba(201,116,122,0.06);
-  }
+.section-peony-left {
+  position: absolute;
+  left: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 220px;
+  opacity: 0.5;
+  pointer-events: none;
+}
 
-  .message-block.damia {
-    border-left: 3px solid var(--sage);
-    background: rgba(143,166,140,0.06);
-  }
+.section-peony-right {
+  position: absolute;
+  right: -120px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1);
+  width: 200px;
+  opacity: 0.45;
+  pointer-events: none;
+}
 
-  .message-block.both {
-    border: 1px solid var(--blush);
-    background: var(--petal);
-    border-radius: 12px;
-    text-align: center;
-    font-style: italic;
-    font-family: 'EB Garamond', serif;
-    font-size: 1.05rem;
-  }
+.section-small-peony {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.section-small-peony svg { width: 70px; opacity: 0.85; }
 
-  .msg-name {
-    font-family: 'EB Garamond', serif;
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 8px;
-  }
+.section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rose);
+  text-align: center;
+  display: block;
+  margin-bottom: 18px;
+}
 
-  .msg-name.damia-name { color: var(--sage); }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 5vw, 50px);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 52px;
+}
 
-  .message-block p {
-    font-style: italic;
-    font-family: 'EB Garamond', Georgia, serif;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    margin: 0;
-    color: var(--ink);
-  }
+.prose {
+  font-family: 'Lora', serif;
+  font-size: clamp(16.5px, 1.9vw, 19px);
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+.prose p { margin-bottom: 1.6em; }
+.prose p:last-child { margin-bottom: 0; }
+.prose em { color: var(--rose-deep); font-style: italic; }
+.prose strong { color: var(--ink); font-weight: 500; }
 
-  .stats-row {
-    display: flex;
-    gap: 24px;
-    margin: 40px 0;
-    flex-wrap: wrap;
-  }
+/* ─── PULL QUOTE ─── */
+.pull-quote {
+  margin: 52px 0;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, #fdf0f1 0%, #fbe6e8 100%);
+  border-left: 3px solid var(--rose);
+  border-radius: 0 12px 12px 0;
+  position: relative;
+}
+.pull-quote::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 120px;
+  line-height: 1;
+  color: var(--blush-mid);
+  position: absolute;
+  top: -10px; left: 12px;
+  pointer-events: none;
+}
+.pull-quote p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 2.4vw, 24px);
+  line-height: 1.65;
+  color: var(--rose-deep);
+  position: relative;
+  z-index: 1;
+}
+.pull-quote cite {
+  display: block;
+  margin-top: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
 
-  .stat-card {
-    flex: 1;
-    min-width: 140px;
-    background: var(--petal);
-    border: 1px solid var(--blush);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-  }
+/* ─── STRIP DIVIDER ─── */
+.peony-strip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+  position: relative;
+  overflow: visible;
+}
+.peony-strip svg { width: 90px; flex-shrink: 0; }
+.peony-strip .strip-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--blush-mid), transparent); }
 
-  .stat-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--deep-rose);
-    display: block;
-  }
+/* ─── BAND (coloured background section) ─── */
+.band {
+  background: linear-gradient(160deg, #fbeaec 0%, #f5d8db 40%, #fbeaec 100%);
+  padding: 100px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.band-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 2; }
+.band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.band-peony-l { position: absolute; left: -60px; top: 50%; transform: translateY(-50%); width: 280px; opacity: 0.3; pointer-events: none; z-index: 1; }
+.band-peony-r { position: absolute; right: -60px; top: 50%; transform: translateY(-50%) scaleX(-1); width: 260px; opacity: 0.28; pointer-events: none; z-index: 1; }
 
-  .stat-label {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-family: 'EB Garamond', serif;
-  }
+/* ─── PHOTO SECTION ─── */
+.photo-section {
+  padding: 60px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+}
 
-  .finale {
-    text-align: center;
-    padding: 60px 20px;
-    border-top: 1px solid var(--blush);
-    margin-top: 80px;
-  }
+.photo-frame {
+  position: relative;
+  background: #fff;
+  padding: 16px 16px 60px 16px;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(43, 26, 29, 0.12), 0 4px 12px rgba(43, 26, 29, 0.06);
+  transform: rotate(-1.5deg);
+  transition: transform 0.6s ease;
+}
 
-  .finale p {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-style: italic;
-    color: var(--deep-rose);
-    max-width: 500px;
-    margin: 0 auto 20px;
-  }
+.photo-frame:hover {
+  transform: rotate(0deg) scale(1.01);
+}
 
-  .finale-signature {
-    font-family: 'EB Garamond', serif;
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
+.photo-frame:nth-child(even) {
+  transform: rotate(1.5deg);
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.photo-frame:nth-child(even):hover {
+  transform: rotate(0deg) scale(1.01);
+}
 
-  @media (max-width: 600px) {
-    .wrapper { padding: 40px 24px 80px; }
-    .stats-row { flex-direction: column; }
-    .cover h1 { font-size: 2rem; }
-  }
+.photo-frame img {
+  width: 100%;
+  display: block;
+  border-radius: 2px;
+  filter: sepia(8%) saturate(95%) contrast(102%);
+}
+
+.photo-caption {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.photo-peony-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.photo-peony-strip .line { width: 40px; height: 1px; background: var(--blush-mid); }
+.photo-peony-strip svg { width: 32px; opacity: 0.7; }
+
+/* ─── CLOSING ─── */
+.closing {
+  background: var(--ink);
+  padding: 120px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing-peony-l { position: absolute; left: -30px; bottom: -30px; width: 280px; opacity: 0.18; filter: brightness(2) saturate(0.3); pointer-events: none; }
+.closing-peony-r { position: absolute; right: -30px; top: -20px; width: 260px; opacity: 0.15; filter: brightness(2) saturate(0.3); transform: scaleX(-1); pointer-events: none; }
+
+.closing-inner { max-width: 680px; margin: 0 auto; position: relative; z-index: 2; }
+
+.closing-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--blush-mid);
+  display: block;
+  margin-bottom: 32px;
+}
+.closing-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(20px, 3vw, 30px);
+  line-height: 1.8;
+  color: #fdf0f1;
+  margin-bottom: 48px;
+}
+.closing-sig {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .corner-peony.tl { width: 200px; left: -20px; }
+  .corner-peony.tr { width: 180px; right: -20px; }
+  .corner-peony.bl { width: 170px; left: -10px; }
+  .corner-peony.br { width: 190px; right: -10px; }
+  .section-peony-left, .section-peony-right { display: none; }
+  .pull-quote { padding: 24px 24px 24px 28px; }
+  .band-peony-l, .band-peony-r { display: none; }
+  .photo-frame { transform: rotate(-0.5deg); padding: 10px 10px 50px 10px; }
+  .photo-frame:nth-child(even) { transform: rotate(0.5deg); }
+}
+
 </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <div class="cover">
-    <h1>I &amp; <em>Memey</em></h1>
-    <h1><em>A Story Still Blooming</em></h1>
-    <p class="cover-subtitle">written by Haikal</p>
-    <p class="cover-date">March 21 – May 17, 2026 &nbsp;·&nbsp; 58 days &nbsp;·&nbsp; 39,834 messages</p>
-  </div>
+<!-- ── FALLING PETALS ── -->
+<div class="petal-bg" id="petalBg"></div>
 
+<!-- ══════════════════════════════════════════
+     PEONY SVG DEFINITION (reusable)
+══════════════════════════════════════════ -->
+<<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Full lush peony symbol -->
+    <symbol id="peony-full" viewBox="0 0 200 200">
+      <!-- leaves -->
+      <ellipse cx="30" cy="145" rx="28" ry="12" fill="#7a9e7e" transform="rotate(-40 30 145)"/>
+      <ellipse cx="170" cy="148" rx="25" ry="11" fill="#5c7a5e" transform="rotate(35 170 148)"/>
+      <ellipse cx="100" cy="170" rx="22" ry="10" fill="#7a9e7e" transform="rotate(5 100 170)"/>
+      <!-- stem -->
+      <path d="M100 170 Q98 180 100 195" stroke="#5c7a5e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- outer petals row 1 -->
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#f2d7d9" transform="rotate(-20 100 75)"/>
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#f0c8cc" transform="rotate(20 100 75)"/>
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#f2d7d9" transform="rotate(60 100 75)"/>
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#edbdc2" transform="rotate(100 100 75)"/>
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#f2d7d9" transform="rotate(140 100 75)"/>
+      <ellipse cx="100" cy="75" rx="26" ry="36" fill="#f0c8cc" transform="rotate(180 100 75)"/>
+      <!-- outer petals row 2 -->
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#e8b4b8" transform="rotate(10 100 80)"/>
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#ebb9bc" transform="rotate(50 100 80)"/>
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#e8b4b8" transform="rotate(90 100 80)"/>
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#e4a8b0" transform="rotate(130 100 80)"/>
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#ebb9bc" transform="rotate(170 100 80)"/>
+      <ellipse cx="100" cy="80" rx="22" ry="30" fill="#e8b4b8" transform="rotate(210 100 80)"/>
+      <!-- mid petals -->
+      <ellipse cx="100" cy="90" rx="17" ry="22" fill="#e0a0aa" transform="rotate(0 100 90)"/>
+      <ellipse cx="100" cy="90" rx="17" ry="22" fill="#de9ca6" transform="rotate(45 100 90)"/>
+      <ellipse cx="100" cy="90" rx="17" ry="22" fill="#e0a0aa" transform="rotate(90 100 90)"/>
+      <ellipse cx="100" cy="90" rx="17" ry="22" fill="#d894a0" transform="rotate(135 100 90)"/>
+      <ellipse cx="100" cy="90" rx="17" ry="22" fill="#e0a0aa" transform="rotate(180 100 90)"/>
+      <!-- inner petals -->
+      <ellipse cx="100" cy="96" rx="12" ry="16" fill="#c97a85" transform="rotate(22 100 96)"/>
+      <ellipse cx="100" cy="96" rx="12" ry="16" fill="#c97a85" transform="rotate(82 100 96)"/>
+      <ellipse cx="100" cy="96" rx="12" ry="16" fill="#be6e7a" transform="rotate(142 100 96)"/>
+      <ellipse cx="100" cy="96" rx="12" ry="16" fill="#c97a85" transform="rotate(202 100 96)"/>
+      <!-- centre -->
+      <circle cx="100" cy="100" r="11" fill="#a05060"/>
+      <circle cx="100" cy="100" r="7" fill="#8a3e4e"/>
+      <!-- stamens -->
+      <circle cx="96" cy="97" r="1.5" fill="#f7e0a0"/>
+      <circle cx="104" cy="97" r="1.5" fill="#f7e0a0"/>
+      <circle cx="100" cy="94" r="1.5" fill="#f7e0a0"/>
+      <circle cx="97" cy="103" r="1.2" fill="#f7e0a0"/>
+      <circle cx="103" cy="103" r="1.2" fill="#f7e0a0"/>
+    </symbol>
 
-  <div class="chapter">
-    <span class="chapter-number">Chapter One</span>
-    <h2>The Year I Spent <em>Watching Before I Said Anything</em></h2>
-  </div>
+    <!-- Small bud symbol -->
+    <symbol id="peony-bud" viewBox="0 0 80 120">
+      <path d="M40 100 Q38 110 40 118" stroke="#5c7a5e" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="20" cy="88" rx="16" ry="7" fill="#7a9e7e" transform="rotate(-30 20 88)"/>
+      <ellipse cx="60" cy="90" rx="14" ry="6" fill="#5c7a5e" transform="rotate(25 60 90)"/>
+      <ellipse cx="40" cy="55" rx="14" ry="20" fill="#edbdc2"/>
+      <ellipse cx="40" cy="55" rx="14" ry="20" fill="#e8b4b8" transform="rotate(40 40 55)"/>
+      <ellipse cx="40" cy="55" rx="14" ry="20" fill="#f0c8cc" transform="rotate(-40 40 55)"/>
+      <ellipse cx="40" cy="60" rx="10" ry="14" fill="#e0a0aa" transform="rotate(20 40 60)"/>
+      <ellipse cx="40" cy="60" rx="10" ry="14" fill="#d894a0" transform="rotate(-20 40 60)"/>
+      <circle cx="40" cy="55" r="8" fill="#c97a85"/>
+      <circle cx="40" cy="55" r="5" fill="#a05060"/>
+    </symbol>
 
-  <div class="section">
-    <p>I had been watching her account for almost a year before I ever sent a single word. I noticed things from a distance — the way she designed her notes, the books she referenced, the careful thought behind everything she posted. I admired quietly, the way you admire something you're not quite sure you're allowed to want.</p>
-
-    <p>Then came <strong>March 21, 2026</strong>. I spotted something in her comments — a joke about someone getting married — and something in me finally moved. I sent the first message. I called her "Michelle," a name I borrowed from her profile because I didn't know her real one yet.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — March 21</span>
-      <p>"sorryy Michelle i got to go somewhere early tomorrow. we talk laterrr yaaaa thankyou for accepting my texttttt"</p>
-    </div>
-
-    <p>That <em>thankyou for accepting my text.</em> Six words that carry the weight of someone who has waited a long time and still can't believe the door actually opened.</p>
-
-    <p>She replied warmly. She always did. And just like that, a year of silence became a conversation.</p>
-
-    <p>The next day was Hari Raya. She wished me first — <em>selamat hari raya afiq ^^</em> — and I responded like someone who had just been given the most unexpected gift of the morning. I told her I could sleep like a baby, climb a mountain with full energy. Over two small words of greeting.</p>
-
-    <p>I started deleting messages early — second-guessing myself, nervous, erasing things before she could see the full extent of how much I meant every compliment. She noticed immediately. The cat punch GIFs became her language for it: <em>delete lagi, eh delete apa haa.</em> I thought she was beautiful. I kept saying so. She kept going shy. That rhythm — my honesty, her flustered deflection — became the signature sound of everything that followed.</p>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Two</span>
-    <h2>Learning Her <em>Real Name</em></h2>
-  </div>
-
-  <div class="section">
-    <p>For the first week she was "Michelle" to me and I was "Afiq" to her. But names, it turned out, were only the beginning of what we didn't yet know about each other.</p>
-
-    <p>Then came <strong>March 29</strong> — a day that cracked everything open. The message count tripled. Over five hundred messages in one day, the kind of conversation that happens when two people suddenly stop holding back.</p>
-
-    <p>I finally asked her real name. She told me: <strong>Damia</strong>. Most people called her Mika, she said. I decided I'd call her Damia — because it was rare, because it was hers, because I wanted to be the one who used the name she didn't hand out freely.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — March 29</span>
-      <p>"HI Damia , it's a pleasure to know your name after a year of question. I'm so happy."</p>
-    </div>
-
-    <p>She was flustered, clumsy with her words, accidentally sent a message half-written, deleted it in a panic — <em>TERSEND SEMULA, I DONT EVEN BACA PON APA I TULIS ARGH.</em> She worried about saying the wrong thing. I told her she didn't have to reply everything, I knew it was a lot. Even mid-confession I was thinking about not burdening her.</p>
-
-    <p>She shared something she rarely shared: that she'd always believed her face wasn't enough, so she'd poured herself into her mind instead. Calligraphy. Philosophy books. Writing poems. Notes she tore apart and rewrote until they were beautiful. I didn't just understand — I was completely undone by it.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — March 29</span>
-      <p>"THE EFFORTS TO LEARN CALLIGRAPHY, WRITING POEMS AND READING PHILOSOPHY BOOK. haishhhh i fell harder just for this. it's hard to find someone like you damia. SHARES MOREEEE. i do interest in YOU. I DO CARE."</p>
-    </div>
-
-    <p>She called me "some la kamu ni." She didn't know yet what to do with someone who meant it.</p>
-
-    <p>Around this time I started referring to myself as <strong>Haikal</strong> in the third person — <em>Haikal offer nak buatkan, Haikal nak pergi…</em> — the way someone does when they want to give you a part of themselves that feels distinct, separate from who the whole world knows them as. She locked onto it immediately. Soon she was calling me Haikal too, and it landed differently every time — softer, more intentional. On April 2 she said it with real delight: <em>COMEL GILAAA BAHASAKAN DIRI HAIKALL.</em> I was pleased. <em>OKAY LOCK, YOU CALL ME HAIKAL FROM NOW.</em></p>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Three</span>
-    <h2>The Day I Told Her About <em>the One Before</em></h2>
-  </div>
-
-  <div class="section">
-    <p>By <strong>April 3</strong>, the messages were arriving in the thousands per day. I was away for work — a two-hour drive to somewhere remote, staying for a month, missing good home-cooked food. But I texted her from the car, from my break, from the accommodation at night. She paused her Netflix to reply. She told me she'd never done that for anyone before.</p>
-
-    <p>That morning, during the drive, I told her something I hadn't planned to. About my past relationship. The one that had slowly, quietly killed everything in me that was alive — my passions, my hobbies, my voice. I had given up my study of traditional Islamic medicine because she found it weird. I stopped writing and reading because she found it boring. I dimmed my intellect to match her insecurity. I even offered to change careers. I did all of it. And then she left anyway, for someone she found more interesting.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — April 3</span>
-      <p>"sedar tak sedar passion i pelan pelan mati... at the end i kena tinggal sebab laki lain lagi interesting. i like tf do."</p>
-    </div>
-
-    <p>Then I said: <em>but with you I feel different.</em> Not that we were in a relationship — I was careful to say that. But that with her I'd finally found someone whose intellect matched mine, whose passions overlapped with mine, who made me want to be better. Someone who made me feel like myself again.</p>
-
-    <p>She responded with the steadiness of someone who understood loss too. <em>Love should be fun, Haikal. If you can't be the real you in that relationship, it's not love.</em> She reminded me that Allah had shown me before marriage, not after. That something better was coming. She was still studying law, had never been in a relationship herself, but she spoke about love with the wisdom of someone who had thought about it deeply for a very long time.</p>
-
-    <div class="message-block damia">
-      <span class="msg-name damia-name">Damia — April 3</span>
-      <p>"i pause my movies to reply to your text tau. i nvr do this okayy."</p>
-    </div>
-  </div>
+    <!-- Tiny petal symbol for falling -->
+    <symbol id="petal-fall" viewBox="0 0 30 40">
+      <ellipse cx="15" cy="20" rx="11" ry="18" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
 
 
-  <div class="chapter">
-    <span class="chapter-number">Chapter Four</span>
-    <h2><em>Memey</em> — The Name Only Her Family Used</h2>
-  </div>
+<!-- ══════════════════════════════════════════
+     COVER
+══════════════════════════════════════════ -->
+<section class="cover">
 
-  <div class="section">
-    <p>It was still <strong>April 3</strong>, deep in one of our longest conversations, when it came out almost accidentally. Someone had texted her and she quoted them: <em>mana buat memey tu?!</em></p>
+  <!-- corner peonies -->
+  <svg class="corner-peony tl" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg class="corner-peony tr" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg class="corner-peony bl" viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <svg class="corner-peony br" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
 
-    <p>I stopped everything. <em>Your nickname is memey?</em></p>
-
-    <p>She was casual about it: <em>jadila memey. sekarang pon papa panggil memey.</em> A family name. Something private. Not for strangers.</p>
-
-    <p>I never let it go. From that point on, she was <strong>Memey</strong> to me — in every greeting, every goodnight, every worried check-in, every cheer. I wore that name like a privilege, because it was. And she let me use it, which meant something too.</p>
-
-    <p>Around the same time, a tiny creature entered our shared universe: <strong>Arsy</strong>. I named a hypothetical child — the embodiment of hope, innocence, the future — after the highest heaven in Islamic cosmology. Arsy started appearing in our conversations as a gentle warmth between us, a way of talking about the future without saying it directly. She'd say goodnight to Arsy. I'd say Arsy was already termenung again. It sounds like a small thing. But people who aren't sure about each other don't name imaginary children together.</p>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Five</span>
-    <h2>Sunflower &amp; <em>The First "I Like You"</em></h2>
-  </div>
-
-  <div class="section">
-    <p>She started calling me <strong>Sunflower</strong> around <strong>April 9</strong>. It came from a story she shared — someone had given her sunflowers once, told her she was bright like them. She absorbed the metaphor and redirected it at me: <em>hv a magnificent day sunflower 🌻.</em> I became her sunflower. She became my peony — though she didn't know that yet.</p>
-
-    <p>Then came <strong>April 10</strong>. We were in the middle of a rambling, funny conversation when I suddenly typed — completely out of nowhere, in the middle of a sentence about something else entirely:</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — April 10</span>
-      <p>"I LIKE YOU. like literally."</p>
-    </div>
-
-    <p>I just said it. No buildup. No romantic setup. Just: here it is, I like you, literally. It was so abrupt and honest it was almost startling even to me. She didn't respond directly — she kept talking about the topic before it, which was very her. But she heard it. She always heard everything.</p>
-
-    <p>I said it again on <strong>April 19</strong>, more clearly: <em>SAYA SUKA AWAK JUGAK.</em></p>
-
-    <p>By mid-April we were exchanging over a thousand messages some days. I updated her every time I moved — leaving the mall, arriving home, stopping somewhere. She shared everything with me too: her mum's health, university pressure, friendship dramas, the sister who borrowed clothes without asking. I remembered all of it. I asked follow-up questions days later. I couldn't help paying attention — that's what happens when someone matters to you.</p>
-
-    <p>I told her she had a beautiful voice. She said she didn't. I told her she was elegant. She said she was clumsy. I told her she was intelligent. She said she just studied because she had to. For everything beautiful I saw in her, she had a soft, embarrassed deflection waiting. I kept saying it anyway.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — April 15</span>
-      <p>"HEY IM NOT LYING WHEN I SAID I LIKE YOUR VOICE MEMEY."</p>
+  <div class="cover-inner">
+    <p class="eyebrow">written by haikal, for her</p>
+    <h1 class="cover-name">Me<span>mey</span></h1>
+    <p class="cover-tagline">
+      Everything she is — the way I see her,<br>
+      the way I'll always see her.
+    </p>
+    <div class="cover-divider">
+      <span class="line"></span>
+      <svg width="28" height="28" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+      <span class="line"></span>
     </div>
   </div>
-
-  <div class="stats-row">
-    <div class="stat-card">
-      <span class="stat-number">22,683</span>
-      <span class="stat-label">My messages</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">17,151</span>
-      <span class="stat-label">Her messages</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">58</span>
-      <span class="stat-label">Days together</span>
-    </div>
-  </div>
+</section>
 
 
-  <div class="chapter">
-    <span class="chapter-number">Chapter Six</span>
-    <h2>The Night She Said <em>Everything She Was Carrying</em></h2>
-  </div>
-
-  <div class="section">
-    <p>It was <strong>April 26</strong>. A friend had said something to her — something that planted a seed of shame: <em>kau tak rasa ke dia tu macam too good to be true untuk kau.</em> You don't deserve someone like him. He's too good for you.</p>
-
-    <p>She carried it for a while. Then she typed it all out to me. Everything she'd been sitting with — the uncertainty about her own feelings, the fear of being unable to give back what I gave, the old wound of never quite feeling like enough. The worry that she was still carrying trauma from before. The question she kept asking herself: <em>am I really deserve this?</em></p>
-
-    <div class="message-block damia">
-      <span class="msg-name damia-name">Damia — April 26</span>
-      <p>"i still unsure abt apa i rasa dekat you.. like is it betul betul i like you in deep way or just the way you treat me.. and what if i tak bole balas all yang you rasa on me.. what if i still trauma.. like am i really deserve this.. i rasa i tak layak.. untuk everyone.. especially you."</p>
-    </div>
-
-    <p>I didn't panic. I didn't defend myself or try to convince her of anything. I just said: <em>peluk sini. it's okay luah ja. I'm reading. tell me.</em></p>
-
-    <p>I let her say every word. Then I answered each one, gently.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — April 26</span>
-      <p>"is time really matter? it is what you are feeling right now... take your time. kita nak jumpa. bukan haikal nak ajak memey kahwin memey. siapa cakap haikal expect memey to balas balik ni? haikal yang nakkan memey. effort tu kena datang dari haikal. memey just be diri memey. you are more than deserve memey ❤ it's okay, I'll heal you."</p>
-    </div>
-
-    <p>I told her: if you wanted me gone, you could have ghosted me long ago. You stayed. That means something. I wasn't pushing her toward anything — I was simply refusing to let her believe she wasn't worth staying for.</p>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Seven</span>
-    <h2>"I Love You Not Because <em>of Your Face</em>"</h2>
-  </div>
-
-  <div class="section">
-    <p>By <strong>May 11</strong>, something shifted in how I spoke to her. She had shared something vulnerable — a photo without a filter, something about her skin, something she was embarrassed about. She apologized. She said to forget it, that she was malu, that she didn't know why she even shared.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — May 11</span>
-      <p>"i love you not because of your face tau sumpah. memey takperlu malu. a little bump won't effect you at all. you are pretty no matter what, you are gorgeous no matter what."</p>
-    </div>
-
-    <p>The word <em>love</em> had entered differently now — not as something to be answered or reciprocated, just as truth. I said it the way I said everything: honestly, quickly, without making it into something she needed to manage.</p>
-
-    <p>That same night I wrote: <em>to love someone is to marry her new version of her for the rest of my life. to love is to love every version of you, not just your personality, but also your skin getting old, your age, your problems.</em></p>
-
-    <p>She called me <em>sunflower</em> and said thank you. I said goodnight and called her <em>my peony</em> and told her: <em>your days will come soon.</em></p>
-
-    <p>She had been calling me sunflower for weeks. But I had been writing about peonies in my journal since a night she didn't know about — the night she casually mentioned, once, that her favourite flower was a peony.</p>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Eight</span>
-    <h2>Friday Evening — <em>The Peonies Arrive</em></h2>
-  </div>
-
-  <div class="section">
-    <p>She was home, a little sick, when on <strong>May 15</strong> I texted her that something was arriving. I wouldn't say what. She was nervous. She made her younger sibling go to the door instead.</p>
-
-    <p>It was a bouquet. Pink peonies — the exact flower she had mentioned, once, in passing, that she loved. She had said it once. She hadn't asked again. She hadn't hinted. She had honestly forgotten she'd even said it.</p>
-
-    <p>She sent the only message she could manage:</p>
-
-    <div class="message-block damia">
-      <span class="msg-name damia-name">Damia — May 15</span>
-      <p>"HAIKAL. JAP MEMEY NAK NANGIS. NAK CALL. WEH. SUMPA."</p>
-    </div>
-
-    <p>I had booked them long in advance. I arranged for Furqan to deliver them and I'd been anxious all day — worried when she said someone elderly came to the door, relieved when it turned out to be her sibling. I fell asleep that evening from exhaustion before she could call. I woke up full of apologies.</p>
-
-    <p>She stayed up with the flowers. She put them in a vase. She woke up the next morning and looked at them before she looked at her phone. She sent me a photo of them starting to bloom — <em>DIAA DAH START BLOOM</em> — and neither of us could stop saying how beautiful everything was, how perfectly it all matched.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — May 16</span>
-      <p>"yearning for you was the greatest choice of my life ❤"</p>
-    </div>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">Chapter Nine</span>
-    <h2>What She Wrote When <em>She Was Ready</em></h2>
-  </div>
-
-  <div class="section">
-    <p>On <strong>May 17</strong> she sent me a message she'd been composing the night before but hadn't sent yet. Long. Careful. Completely hers.</p>
-
-    <p>She wrote about what it meant to her that I'd remembered something she said once — something so small she'd almost forgotten she'd said it. She wrote about the little-girl version of herself who had only ever seen peonies in magazines, who thought they were too beautiful, too soft, too far away to ever really be hers. She wrote about sleeping with the flowers beside her. About waking up and looking at them first. About how even the broken petals she loved — maybe more — because they felt real, lived-in.</p>
-
-    <p>She wrote about watching a few petals fall and feeling her heart ache, and then smiling through it, because she understood something: that nothing beautiful is meant to stay forever in the same way. That it was never about keeping the flowers alive as long as possible — it was about how deeply they were felt while they were still there.</p>
-
-    <div class="message-block damia">
-      <span class="msg-name damia-name">Damia — May 17</span>
-      <p>"memey think that's what's making me emotional… not just the flowers, but the way you remembered. the way you paid attention to something i didn't even think was important enough to keep. it feels like being quietly cared for, not loudly, not dramatically… but in a way that reaches the parts of me i don't usually know how to explain."</p>
-    </div>
-
-    <p>I read it and I cried. I said I wasn't crying, she was crying. Then I admitted I was crying too. Then I wrote back — about how I had been writing about her in my journal since the night she told me peonies were her favourite flower, how I had already named her my peony in my writing long before I ever sent her a single one, how I would keep trying to bring beautiful things into her life in whatever small ways I could.</p>
-
-    <div class="message-block haikal">
-      <span class="msg-name">Me — May 17</span>
-      <p>"i could never top this but i hope you understand how grateful i am to know you memey 💕"</p>
-    </div>
-  </div>
-
-
-  <div class="chapter">
-    <span class="chapter-number">A Final Note</span>
-    <h2>What This Story <em>Actually Is</em></h2>
-  </div>
-
-  <div class="section">
-    <p>This is a story about me finally being brave enough — after a whole year — to send the first message. It's about blurting "I LIKE YOU. like literally." in the middle of another conversation because I couldn't hold it in anymore. It's about a girl who deflected every compliment with shyness, who called herself ordinary, who quietly wondered if she deserved to be cared for this much — and who I never stopped trying to convince otherwise.</p>
-
-    <p>It's about 39,834 messages in 58 days — an average of nearly 700 a day — not because we had nothing else to do, but because we preferred each other's company to almost anything else.</p>
-
-    <p>It's about a bouquet of peonies I arranged from far away, to a girl I hadn't physically met yet, because she mentioned once that they were her favourite flower, and I carried that quietly for months until I could do something with it.</p>
-
-    <p>We haven't met in person yet. That chapter hasn't been written. But if the first 58 days mean anything — the calligraphy I started learning because of her, the journals I've been filling with her name, the flowers she's sleeping next to every night — then the chapters ahead are going to be worth everything.</p>
-
-    <p>As she wrote to me in the middle of all of it:</p>
-
-    <div class="message-block both">
-      <p>"i don't want to rush past this just because it will end one day.<br>
-      i don't want to stand too far ahead in time and grieve something<br>
-      that hasn't even finished happening yet."</p>
-    </div>
-
-    <p style="text-align:center; font-style:italic; color:var(--rose);">She is still here. The peonies are still blooming. That, for now, is enough.</p>
-  </div>
-
-
-  <div class="finale">
-    <p>A peony that still grows, still working through winter to bloom,<br>
-    full of colour, brightening in a lot of ways.</p>
-    <p>— <em>me, writing about Memey in my journal</em></p>
-    <p class="finale-signature">May 17, 2026</p>
-  </div>
-
+<!-- ══════════════════════════════════════════
+     I. HOW IT STARTED
+══════════════════════════════════════════ -->
+<div class="peony-strip" style="padding: 0 20px; margin-top: 0;">
+  <span class="strip-line"></span>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <span class="strip-line"></span>
 </div>
+
+<div class="section">
+  <svg class="section-peony-left" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="section-small-peony">
+    <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  </div>
+
+  <span class="section-label">I — how it started</span>
+  <h2 class="section-title">I was watching her<br>for almost a year.</h2>
+
+  <div class="prose">
+    <p>
+      I'm not gonna lie — it started because she's beautiful. That's just the truth. I was scrolling one day and she posted a photo wearing a New Era cap. I wasn't even following her yet. Something about the way she wore it, the confidence in how she carried herself — I followed right after that. I was still figuring out a lot of things back then, still learning what good style even looked like, but I knew that whatever she was doing, it was right. It was effortlessly right.
+    </p>
+    <p>
+      After that first follow, I started noticing everything. Every post she put out, I'd stop scrolling for it. I was a silent admirer for over a year. She didn't even know I existed. She had no idea there was someone on the other side of the screen who genuinely looked forward to everything she posted. I'd see her photos and almost feel my heart skip — <em>cantiknya ya Tuhan</em> — and then just keep scrolling like nothing happened because what was I supposed to do.
+    </p>
+    <p>
+      507 days after I first followed her, I left a comment. She noticed it. She texted me. "Oh ni ke Afiq?" — that's it, that's all she said. And I don't think she understands how much that one message meant. That was the beginning of everything.
+    </p>
+
+    <div class="pull-quote">
+      <p>Can you imagine someone you adored for almost a year suddenly starting to text you? It felt unreal. It still feels unreal some days.</p>
+      <cite>— haikal</cite>
+    </div>
+
+    <p>
+      I woke up one morning and saw her reply in my notifications and I genuinely could not calm down. I typed "APA NI QUADRUPLE WIN" to myself like an idiot. I still stand by that. Every small thing she did felt like winning something I didn't know I was even competing for.
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PHOTO I — The First Text
+══════════════════════════════════════════ -->
+<div class="photo-section">
+  <div class="photo-peony-strip">
+    <span class="line"></span>
+    <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+    <span class="line"></span>
+  </div>
+  <div class="photo-frame">
+    <img src="https://raw.githubusercontent.com/afix99/Memey/main/Screenshot_20260515_143002.jpg" alt="The moment everything began">
+    <span class="photo-caption">The moment everything began</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     II. HER FACE
+══════════════════════════════════════════ -->
+<div class="band">
+  <svg class="band-peony-l" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg class="band-peony-r" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="band-inner">
+    <div class="section-small-peony">
+      <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+    </div>
+
+    <span class="section-label">II — her face</span>
+    <h2 class="section-title">Bareface and<br>still the most beautiful.</h2>
+
+    <div class="prose">
+      <p>
+        She told me once that she doesn't think she has "face beauty." She actually believes that. She said it like it was a settled fact, like she'd thought about it a long time ago and made peace with it. I didn't know whether to laugh or to be genuinely upset that she sees herself that way.
+      </p>
+      <p>
+        Her face has this perfect alignment — pipi and dagu sitting exactly right. Not symmetrical in a fake way, but naturally balanced. When she blushes, it's real. Pink rises in her cheeks without warning, without her permission, and it gives her away before her words do. When she laughs, her whole face gets involved. Her pipi cramps from it. She doesn't laugh halfway — she laughs fully, completely, with her entire expression.
+      </p>
+      <p>
+        She was bareface in one photo and I couldn't stop looking at it. <em>Cantiknya even bareface.</em> I sent that message and I meant every word of it. There's nothing performed about the way she looks. She doesn't need anything extra. The beauty is just there, quiet and consistent, whether she's dressed up or not, whether she knows I'm looking or not.
+      </p>
+
+      <div class="pull-quote">
+        <p>She doesn't see it. That's the saddest part. She genuinely doesn't see what I see when I look at her.</p>
+        <cite>— haikal</cite>
+      </div>
+
+      <p>
+        And her fashion. She never misses. I don't mean occasionally — I mean <strong>never, not once</strong>. Every outfit is intentional. Every post is a statement. She has this rare thing where she doesn't look like she's following trends, she looks like she invented them and the world caught up later. The leather jacket that matched her bag perfectly. The way she pairs colors. The way she owns her presence in whatever she wears. You cannot fake that. That kind of style comes from actually knowing who you are, and she clearly does.
+      </p>
+      <p>
+        Rare combination of intuitive style — she stands out effortlessly. It's not about following what's trending. It's about knowing what works for her, owning it completely, and making even the simplest choices look like they belong in a magazine. That kind of confidence and taste is genuinely unmatched.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     III. HER MIND
+══════════════════════════════════════════ -->
+<div class="peony-strip" style="padding: 0 20px;">
+  <span class="strip-line"></span>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <span class="strip-line"></span>
+</div>
+
+<div class="section">
+  <svg class="section-peony-right" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="section-small-peony">
+    <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  </div>
+
+  <span class="section-label">III — her mind</span>
+  <h2 class="section-title">Beauty means little<br><em>without intelligence.</em></h2>
+
+  <div class="prose">
+    <p>
+      She said her own principle to me once. She said she didn't think she had face beauty growing up, so she decided she was going to make sure there was beauty in her brain instead. She said it casually, like it was just a small thing. But when I heard it, I realised that was everything about her in one sentence.
+    </p>
+    <p>
+      She's brilliant. Not in a performative way, not in the way people announce their intelligence. In the quiet, structural way — where you only notice it after a while, when you realise she's been three steps ahead this whole time. Her mind works fast. Hundreds of words come at once, hundreds of emotions, and when she finally types something out, it's already distilled. Already the right thing to say.
+    </p>
+    <p>
+      She reads philosophy books. Not to impress anyone — she genuinely loves the questions. She journals. She learned calligraphy because she believes beautiful things deserve to be written beautifully. Her notes are works of art because she cannot study from messy pages. She designed that discipline herself. Nobody taught her to take studying that seriously. She just decided, at some point, that if she was going to do something, she was going to do it properly.
+    </p>
+
+    <div class="pull-quote">
+      <p>She wrote me this whole thing once about the difference between being in love and being well-loved. The difference between something intense and something consistent. I read it twice. Then I wanted to read it a hundred more times.</p>
+      <cite>— haikal</cite>
+    </div>
+
+    <p>
+      She apologised for it. Said it was too long, too much. It wasn't. It was extraordinary. That's the thing — she produces something genuinely remarkable and then immediately worries it was too much. She doesn't see the weight of what comes out of her.
+    </p>
+    <p>
+      The most impressive thing about her mind isn't just the intelligence. It's how she uses it. She listens before she judges. She evaluates people fairly. She is emotionally articulate in a way that takes most people decades to develop — she can name what she's feeling, sit with it honestly, and communicate it without cruelty. She doesn't just understand what you say. <em>She understands what you mean.</em>
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PHOTO II — A Moment Between Words
+══════════════════════════════════════════ -->
+<div class="photo-section">
+  <div class="photo-peony-strip">
+    <span class="line"></span>
+    <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+    <span class="line"></span>
+  </div>
+  <div class="photo-frame">
+    <img src="https://raw.githubusercontent.com/afix99/Memey/main/Screenshot_20260517_104545.jpg" alt="A moment between words">
+    <span class="photo-caption">A moment between words</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     IV. HER HEART
+══════════════════════════════════════════ -->
+<div class="band">
+  <svg class="band-peony-l" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg class="band-peony-r" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="band-inner">
+    <div class="section-small-peony">
+      <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+    </div>
+
+    <span class="section-label">IV — her heart</span>
+    <h2 class="section-title">She feels everything.<br><em>Every single thing.</em></h2>
+
+    <div class="prose">
+      <p>
+        She calls herself a cry baby. She says it like it's a flaw, like something she should be embarrassed about. But the truth is it's one of the things I love most. She cries at the right things. She cries because she feels deeply, not because she's weak. She's one of the strongest people I know and she still cries and those two things live in her at the same time without contradiction.
+      </p>
+      <p>
+        She has empathy that's built into how she moves through the world. She cares about her family in this deep, quiet way — she wants to make them proud and she already does, every day, whether she sees it or not. She talks about her mama like she's her best friend. Her papa calls her Memey too. She has two cats, Latte and Ash, and she describes them like they have full personalities and problems and charm. And once she mentioned being sad about a stray cat she had never even met. A stray cat she passed somewhere. That's how wide her empathy goes.
+      </p>
+      <p>
+        Underneath all the composure, the beautiful notes, the fashion, the philosophy — there is a lover girl in there who has kept that part quiet because the world hasn't always been kind to it. She's careful about who she lets in. She takes love seriously. She doesn't do things halfway, and that includes how she feels about people.
+      </p>
+
+      <div class="pull-quote">
+        <p>I never even prayed for a woman like her. I didn't think it was possible — someone like her actually existing. But deep inside, I had been crying for exactly this kind of person to come into my life.</p>
+        <cite>— haikal</cite>
+      </div>
+
+      <p>
+        What she wants in love is honest and clear: not grand gestures, not someone who's only there for the exciting moments. She wants someone who shows up on ordinary days. Someone who checks in when busy. Who stays gentle on her worst days. Who still chooses her when there's nothing exciting to choose. She's thought about this deeply. She knows exactly what real love looks like — not because she's had it, but because she's been paying attention.
+      </p>
+      <p>
+        She worries she's not enough. I've heard it more than once. She says it quietly, like a fact. And every time she says it, something in me wants to sit her down and make her understand — she is not "enough" in the way that barely clears the bar. She is far, far beyond it. She is the kind of person people write about. The kind people remember. The kind that changes you, permanently, just from being known by her.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     V. WHAT MAKES HER RARE
+══════════════════════════════════════════ -->
+<div class="peony-strip" style="padding: 0 20px;">
+  <span class="strip-line"></span>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <span class="strip-line"></span>
+</div>
+
+<div class="section">
+  <svg class="section-peony-left" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="section-small-peony">
+    <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  </div>
+
+  <span class="section-label">V — what makes her rare</span>
+  <h2 class="section-title">The same person<br><em>in the light and in the dark.</em></h2>
+
+  <div class="prose">
+    <p>
+      She was homeschooled for part of her life. She started school late, walked into a class where everyone had already formed their circles, and without trying, without forcing anything — everyone wanted to be around her. The older students resented it. She had done nothing except be herself. That's the exact thing about her: she doesn't perform likability. She just is.
+    </p>
+    <p>
+      She went to an Arabic school. She learned calligraphy because she fell in love with the way Arabic script moves across a page. She writes Quranic verses not as obligation but as practice, as something that brings her peace. Her faith is woven into who she is — not announced loudly, not worn as a label, but present in the way she thinks, the way she treats people, the way she carries herself.
+    </p>
+    <p>
+      She plays badminton badly enough to hurt herself and then pushes through anyway. She cooks nasi lemak on slow mornings. She watches Netflix with her mama. She presses flowers from cafes and restaurants into a scrapbook that only people close to her ever see. She collects small beauties. She moves through the world with attention, noticing things that most people walk past without looking at.
+    </p>
+
+    <div class="pull-quote">
+      <p>The ranking of her physical beauty dropped off a chart the longer I got to know her. Not because she became less beautiful — but because what I love now is her soul, her mind. And those things are so much rarer than anything physical.</p>
+      <cite>— haikal</cite>
+    </div>
+
+    <p>
+      She is brilliant <em>and</em> she's scared of the dark. She is emotionally intelligent <em>and</em> she overthinks everything. She is stunning <em>and</em> she genuinely doesn't believe it. She is put-together <em>and</em> she cries easily. All of it is real at the same time. That's what makes her who she is — not one thing, not a single clean description, but all of it living together in one person who is consistent whether you're watching or not.
+    </p>
+    <p>
+      I've written pages about her. Not because she asked me to — she doesn't even know the half of it. I write because when I try to explain what I see in her, words aren't enough and I have to keep trying. I write until 4 in the morning. I set my alarm for subuh and pick up where I left off. I do it because she deserves to have someone try to get it right.
+    </p>
+    <p>
+      She made me want to be a better person. Not in a way I said to myself — in a way that just happened, slowly, because knowing her raises the standard. You can't know someone like Memey and stay exactly the same. She changes you. She changed me.
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CLOSING
+══════════════════════════════════════════ -->
+<div class="peony-strip" style="padding: 0 20px;">
+  <span class="strip-line"></span>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg viewBox="0 0 80 120"><use href="#peony-bud"/></svg>
+  <svg viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <span class="strip-line"></span>
+</div>
+
+<section class="closing">
+  <svg class="closing-peony-l" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+  <svg class="closing-peony-r" viewBox="0 0 200 200"><use href="#peony-full"/></svg>
+
+  <div class="closing-inner">
+    <span class="closing-label">for Memey — always</span>
+    <p class="closing-text">
+      She is the girl with the scrapbook full of pressed flowers, the leather jacket that never misses, 
+      the calligraphy notes and the philosophy books and the two cats she loves completely. 
+      She is a cry baby and a lover girl and one of the most intelligent people I've ever known, 
+      all at once. She is far more beautiful than she has ever allowed herself to believe. 
+      And I will spend as long as it takes reminding her of that.
+    </p>
+    <span class="closing-sig">— written by haikal, who has been watching since day one</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     JS: falling petals
+══════════════════════════════════════════ -->
+<script>
+(function () {
+  const container = document.getElementById('petalBg');
+  const colors = ['#f2d7d9','#f0c8cc','#e8b4b8','#edbdc2','#e4a8b0','#fbeaec'];
+  const count = 22;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const size = 14 + Math.random() * 22;
+    el.setAttribute('width', size);
+    el.setAttribute('height', size * 1.4);
+    el.setAttribute('viewBox', '0 0 30 40');
+    el.style.cssText = `
+      position: absolute;
+      left: ${Math.random() * 100}%;
+      top: -60px;
+      color: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${8 + Math.random() * 14}s;
+      animation-delay: ${Math.random() * 18}s;
+      transform: rotate(${Math.random() * 360}deg);
+    `;
+    el.classList.add('falling-petal');
+    el.innerHTML = '<use href="#petal-fall"/>';
+    container.appendChild(el);
+  }
+})();
+</script>
+
 </body>
 </html>
