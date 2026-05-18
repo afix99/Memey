@@ -251,6 +251,47 @@ body::after {
   color: var(--rose-deep);
 }
 
+/* ─── PHOTO INSERT ─── */
+.photo-insert {
+  margin: 2.5em auto;
+  max-width: 420px;
+  text-align: center;
+}
+
+.photo-frame {
+  position: relative;
+  background: #fff;
+  padding: 14px 14px 50px 14px;
+  border-radius: 3px;
+  box-shadow: 0 16px 48px rgba(43, 26, 29, 0.1), 0 4px 12px rgba(43, 26, 29, 0.06);
+  transform: rotate(-1.5deg);
+  transition: transform 0.5s ease;
+}
+
+.photo-frame:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.photo-frame img {
+  width: 100%;
+  display: block;
+  border-radius: 2px;
+  filter: sepia(6%) saturate(95%) contrast(102%);
+}
+
+.photo-caption {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
 /* Corner peony decorations on chapter pages */
 .page-deco {
   position: absolute;
@@ -519,6 +560,8 @@ body::after {
   .nav-btn { letter-spacing: 0.3em; }
   .index-toggle { padding: 8px 12px; letter-spacing: 0.25em; }
   .index-panel { padding: 36px 28px; }
+  .photo-insert { max-width: 320px; }
+  .photo-frame { padding: 10px 10px 42px 10px; }
 }
 
 @media (max-height: 700px) {
@@ -540,7 +583,7 @@ body::after {
 <!-- ══════════════════════════════════════════
      SVG SYMBOLS
 ══════════════════════════════════════════ -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<<svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <!-- Full peony -->
     <symbol id="peony" viewBox="0 0 200 200">
@@ -656,6 +699,16 @@ body::after {
         <p>After that first follow, I started noticing everything. Every post she put out, I'd stop scrolling for it. I was a silent admirer for over a year. She didn't even know I existed. She had no idea there was someone on the other side of the screen who genuinely looked forward to everything she posted. I'd see her photos and almost feel my heart skip, and then just keep scrolling like nothing happened, because what was I supposed to do.</p>
         <p>For more than a year I watched from a distance. Then one day I said something. And she said something back. That was the beginning of everything.</p>
         <p>I don't think she understands how much that meant to me. Every small thing she did from that point felt like winning something I didn't know I was even competing for.</p>
+
+        <!-- PHOTO I: The First Text -->
+        <div class="photo-insert">
+          <div class="photo-frame">
+            <img src="https://raw.githubusercontent.com/afix99/Memey/main/Screenshot_20260515_143002.jpg" alt="The moment everything began">
+            <span class="photo-caption">The moment everything began</span>
+          </div>
+        </div>
+
+        <p>I woke up one morning and saw her reply in my notifications and I genuinely could not calm down. I typed "APA NI QUADRUPLE WIN" to myself like an idiot. I still stand by that. Every small thing she did felt like winning something I didn't know I was even competing for.</p>
       </div>
     </div>
   </section>
@@ -711,6 +764,16 @@ body::after {
         <p>She reads philosophy books. Not to impress anyone. She genuinely loves the questions. She thinks about love, about identity, about what it means to live well. She wrestles with ideas the way most people wrestle with their feelings.</p>
         <p class="pull">She doesn't just understand what you say. She understands what you mean.</p>
         <p>That is the most rare thing about her mind. Not the intelligence itself. The way she uses it. She listens before she judges. She evaluates people fairly. She is emotionally articulate in a way that takes most people decades to develop. She can name what she's feeling, sit with it honestly, and communicate it without cruelty.</p>
+
+        <!-- PHOTO II: A Moment Between Words -->
+        <div class="photo-insert">
+          <div class="photo-frame">
+            <img src="https://raw.githubusercontent.com/afix99/Memey/main/Screenshot_20260517_104545.jpg" alt="A moment between words">
+            <span class="photo-caption">A moment between words</span>
+          </div>
+        </div>
+
+        <p>She wrote me this whole thing once about the difference between being in love and being well-loved. The difference between something intense and something consistent. I read it twice. Then I wanted to read it a hundred more times.</p>
       </div>
     </div>
   </section>
@@ -867,13 +930,13 @@ body::after {
 <!-- ══════════════════════════════════════════
      BOOK NAVIGATION
 ══════════════════════════════════════════ -->
-<nav class="book-nav">
+<<nav class="book-nav">
   <button class="nav-btn" id="prevBtn">
     <svg viewBox="0 0 24 24"><use href="#arrow-left"/></svg>
     Previous
   </button>
   <span class="page-indicator">
-    <span class="current" id="currentPage">I</span> / <span id="totalPages">XII</span>
+    <span class="current" id="currentPage">·</span> / <span id="totalPages">XII</span>
   </span>
   <button class="nav-btn" id="nextBtn">
     Next
